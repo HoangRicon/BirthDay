@@ -10,13 +10,13 @@
   <!-- Thêm font cho Valentine -->
   <link href="https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&family=Petemoss&family=Roboto:ital,wght@0,100..900;1,100..900&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
-  <!-- Add audio elements -->
-  <audio id="fireworkSound" preload="auto">
+  <!-- Add audio elements - FIREWORK SOUNDS DISABLED -->
+  <!-- <audio id="fireworkSound" preload="auto">
     <source src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3" type="audio/mpeg">
   </audio>
   <audio id="launchSound" preload="auto">
     <source src="https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3" type="audio/mpeg">
-  </audio>
+  </audio> -->
   
 
   <style>
@@ -820,10 +820,10 @@ $(document).ready(function () {
     if (isFireOn) {
       $('.fire').css('opacity', '0');
       isFireOn = false;
-      // Play launch sound when blowing out candles
-      const launchSound = document.getElementById('launchSound');
-      launchSound.currentTime = 0;
-      launchSound.play();
+      // Play launch sound when blowing out candles - DISABLED
+      // const launchSound = document.getElementById('launchSound');
+      // launchSound.currentTime = 0;
+      // launchSound.play();
 
       // Start fireworks after blowing out candles
       setTimeout(() => {
@@ -1309,11 +1309,11 @@ Firework.prototype.update = function() {
 
 Firework.prototype.explode = function() {
   this.exploded = true;
-  // Play explosion sound
-  const fireworkSound = document.getElementById('fireworkSound');
-  fireworkSound.currentTime = 0;
-  fireworkSound.play();
-  
+  // Play explosion sound - DISABLED
+  // const fireworkSound = document.getElementById('fireworkSound');
+  // fireworkSound.currentTime = 0;
+  // fireworkSound.play();
+
   for (let i = 0; i < 50; i++) {
     this.particles.push(new Particle(this.x, this.y, this.color));
   }
@@ -1467,7 +1467,7 @@ window.addEventListener("keypress", function(e) {
               <div class="card-side card-side-primary">
                 <h1 class="card-title">
                   <span class="card-title-secondary">Happy</span>
-                  <span class="card-title-main">Valentine <span class="card-title-apostrophe">❤️</span>s</span>
+                  <span class="card-title-main">Birth <span class="card-title-apostrophe">❤️</span></span>
                   <span class="card-title-secondary">Day</span>
                 </h1>
               </div>
