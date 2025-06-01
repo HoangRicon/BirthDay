@@ -43,6 +43,38 @@
       overflow-x: hidden;
     }
 
+    /* Hide scrollbar for all browsers */
+    html {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+
+    html::-webkit-scrollbar {
+      width: 0; /* Chrome, Safari, Edge */
+      height: 0;
+    }
+
+    body {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+
+    body::-webkit-scrollbar {
+      width: 0; /* Chrome, Safari, Edge */
+      height: 0;
+    }
+
+    /* Hide scrollbar for any scrollable element */
+    *::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    * {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+
     /* Section sinh nhật */
     .birthday-section {
       position: relative;
@@ -671,18 +703,44 @@
 }
   </style>
 
-<audio id="backgroundMusic" autoplay loop preload="auto">
+<audio id="backgroundMusic" autoplay loop preload="auto" muted>
   <source src="Cake.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
+
+<script>
+// Immediate inline script to start music ASAP
+(function() {
+  const music = document.getElementById('backgroundMusic');
+  if (music) {
+    // Start muted autoplay first
+    music.play().then(function() {
+      // Once playing, unmute immediately
+      setTimeout(function() {
+        music.muted = false;
+        music.volume = 0.7;
+        console.log('Music unmuted and playing');
+      }, 100);
+    }).catch(function(error) {
+      console.log('Inline music start failed:', error);
+    });
+  }
+})();
+</script>
 
 <script>
 // Force play music immediately when DOM loads
 document.addEventListener('DOMContentLoaded', function() {
   const music = document.getElementById('backgroundMusic');
   if (music) {
+    // Unmute and set volume immediately
+    music.muted = false;
     music.volume = 0.7;
-    music.play().catch(function(error) {
+
+    // Try to play
+    music.play().then(function() {
+      console.log('Music started successfully on DOM load');
+    }).catch(function(error) {
       console.log('Initial music play failed:', error);
     });
   }
@@ -691,12 +749,34 @@ document.addEventListener('DOMContentLoaded', function() {
 // Also try when window loads
 window.addEventListener('load', function() {
   const music = document.getElementById('backgroundMusic');
-  if (music && music.paused) {
-    music.play().catch(function(error) {
-      console.log('Window load music play failed:', error);
-    });
+  if (music) {
+    music.muted = false;
+    music.volume = 0.7;
+    if (music.paused) {
+      music.play().then(function() {
+        console.log('Music started successfully on window load');
+      }).catch(function(error) {
+        console.log('Window load music play failed:', error);
+      });
+    }
   }
 });
+
+// Immediate attempt
+setTimeout(function() {
+  const music = document.getElementById('backgroundMusic');
+  if (music) {
+    music.muted = false;
+    music.volume = 0.7;
+    if (music.paused) {
+      music.play().then(function() {
+        console.log('Music started successfully on immediate attempt');
+      }).catch(function(error) {
+        console.log('Immediate music play failed:', error);
+      });
+    }
+  }
+}, 100);
 </script>
 
 </head>
@@ -957,35 +1037,40 @@ $(document).ready(function () {
   // Force play music immediately when page loads
   const music = document.getElementById('backgroundMusic');
   if (music) {
-    // Set volume and try to play immediately
+    // Unmute and set volume
+    music.muted = false;
     music.volume = 0.7;
 
     // Multiple attempts to play music
     const playMusic = () => {
-      music.play().then(() => {
-        console.log('Music started successfully');
-      }).catch((error) => {
-        console.log('Music play failed:', error);
-      });
+      if (music.paused) {
+        music.play().then(() => {
+          console.log('Music started successfully in jQuery');
+        }).catch((error) => {
+          console.log('Music play failed in jQuery:', error);
+        });
+      }
     };
 
     // Try to play immediately
     playMusic();
 
     // Try again after short delays
-    setTimeout(playMusic, 100);
+    setTimeout(playMusic, 50);
+    setTimeout(playMusic, 200);
     setTimeout(playMusic, 500);
     setTimeout(playMusic, 1000);
 
-    // Fallback: play on any user interaction
+    // Fallback: play on any user interaction (but should not be needed)
     const enableMusic = function() {
+      music.muted = false;
+      music.volume = 0.7;
       playMusic();
     };
 
     document.addEventListener('click', enableMusic, { once: true });
     document.addEventListener('touchstart', enableMusic, { once: true });
     document.addEventListener('keydown', enableMusic, { once: true });
-    document.addEventListener('mousemove', enableMusic, { once: true });
   }
 
   // Valentine Envelope Animation
