@@ -83,6 +83,13 @@
       font-size: 16px;
       transition: all 0.3s ease;
       z-index: 20;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .blow-button.show {
+      opacity: 1;
+      visibility: visible;
     }
 
     .blow-button:hover {
@@ -874,6 +881,10 @@ $(document).ready(function () {
     // Set cake animation complete after it moves down
     setTimeout(() => {
       cakeAnimationComplete = true;
+      // Show blow button when cake is complete
+      setTimeout(() => {
+        $('.blow-button').addClass('show');
+      }, 200); // Show button 0.2 seconds after cake is complete
       // Show wish message when cake is complete
       setTimeout(() => {
         $('#wishMessage').addClass('show');
@@ -883,11 +894,6 @@ $(document).ready(function () {
 
   // Add blow button click handler
   $('.blow-button').click(function() {
-    if (!cakeAnimationComplete) {
-      alert('Hãy đợi bánh hoàn thiện!');
-      return;
-    }
-
     if (isFireOn) {
       $('.fire').css('opacity', '0');
       $('#wishMessage').removeClass('show'); // Hide wish message when blowing candles
