@@ -84,6 +84,27 @@
       transform: translateX(-50%) scale(1.05);
     }
 
+    .wish-message {
+      position: absolute;
+      bottom: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #FFD700;
+      font-family: 'Lato', sans-serif;
+      font-size: 18px;
+      font-weight: 300;
+      font-style: italic;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      z-index: 25;
+    }
+
+    .wish-message.show {
+      opacity: 1;
+    }
+
     @import url(https://fonts.googleapis.com/css?family=Lato:300italic);
 html,
 body {
@@ -571,6 +592,11 @@ body {
     margin-left: calc(-50vw + 50%);
     margin-right: calc(-50vw + 50%);
   }
+
+  .wish-message {
+    font-size: 16px;
+    bottom: -110px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -618,6 +644,11 @@ body {
   .scroll-indicator {
     font-size: 0.8rem;
   }
+
+  .wish-message {
+    font-size: 14px;
+    bottom: -100px;
+  }
 }
   </style>
 
@@ -642,6 +673,7 @@ body {
   <div class="fire"></div>
 </div>
 <button class="blow-button">Thổi nến</button>
+<div class="wish-message" id="wishMessage">✨ Hãy nhắm mắt lại và ước ✨</div>
 <svg id="cake" version="1.1" x="0px" y="0px" width="200px" height="500px" viewBox="0 0 200 500" enable-background="new 0 0 200 500" xml:space="preserve">
     <path fill="#a88679" d="M173.667-13.94c-49.298,0-102.782,0-147.334,0c-3.999,0-4-16.002,0-16.002
 		c44.697,0,96.586,0,147.334,0C177.667-29.942,177.668-13.94,173.667-13.94z">
@@ -807,6 +839,10 @@ $(document).ready(function () {
     // Set cake animation complete after it moves down
     setTimeout(() => {
       cakeAnimationComplete = true;
+      // Show wish message when cake is complete
+      setTimeout(() => {
+        $('#wishMessage').addClass('show');
+      }, 500); // Show message 0.5 seconds after cake is complete
     }, 1000); // Wait 1 second after cake moves down
   }, 6000);
 
@@ -819,6 +855,7 @@ $(document).ready(function () {
 
     if (isFireOn) {
       $('.fire').css('opacity', '0');
+      $('#wishMessage').removeClass('show'); // Hide wish message when blowing candles
       isFireOn = false;
       // Play launch sound when blowing out candles - DISABLED
       // const launchSound = document.getElementById('launchSound');
@@ -876,12 +913,19 @@ $(document).ready(function () {
     observer.observe(valentineSection);
   }
 
-  document.addEventListener('click', function () {
-    const music = document.getElementById('backgroundMusic');
-    if (music && music.paused) {
-      music.play();
-    }
-  }, { once: true });
+  // Auto play music when page loads
+  const music = document.getElementById('backgroundMusic');
+  if (music) {
+    music.play().catch(function(error) {
+      console.log('Auto-play was prevented:', error);
+      // Fallback: play on first user interaction
+      document.addEventListener('click', function () {
+        if (music.paused) {
+          music.play();
+        }
+      }, { once: true });
+    });
+  }
 
   // Valentine Envelope Animation
   const envelope = document.querySelector('.envelope');
@@ -1448,13 +1492,13 @@ window.addEventListener("keypress", function(e) {
 
   <!-- Scroll Indicator cho phần sinh nhật -->
   <div class="scroll-indicator">
-    ↓ Cuộn xuống để xem thư Valentine ↓
+    ↓ Cuộn xuống để xem thư ↓
   </div>
 
 </div> <!-- Kết thúc birthday-section -->
 
 <!-- Section Valentine -->
-<div class="valentine-section" id="valentine-section">
+<div class="valentine-section" >
     <div class="valentine-container">
       <h1 class="valentine-title">Thư Tình Valentine</h1>
 
